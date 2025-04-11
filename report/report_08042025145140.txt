@@ -1,0 +1,18 @@
+count_check: FAIL
+Details: count is not matching between source and target
+
+Records Only in Source: FAIL
+Details: Count: 5, Sample Failed Records: [{'customer_id': Decimal('1')}, {'customer_id': Decimal('4')}, {'customer_id': Decimal('3')}, {'customer_id': Decimal('2')}, {'customer_id': Decimal('5')}]
+
+Records Only in Target: FAIL
+Details: Count: 12, Sample Failed Records: [{'customer_id': Decimal('10')}, {'customer_id': Decimal('22')}, {'customer_id': Decimal('14')}, {'customer_id': Decimal('9')}, {'customer_id': Decimal('12')}]
+
+duplicate_validation: FAIL
+Details: duplicate validation failed with records [Row(first_name='John', count=2), Row(first_name='Jane', count=2)] and those are [{'first_name': 'John', 'count': 2}, {'first_name': 'Jane', 'count': 2}]
+
+null_validation: FAIL
+Details: failed records are :[{'columns': 'first_name', 'failure_count': 1, 'null values': [{'customer_id': Decimal('11'), 'first_name': '', 'last_name': 'Miller', 'email': 'sarah.miller@example.com', 'created_at': datetime.datetime(2025, 3, 6, 21, 40)}]}]
+
+uniqueness_check:: has been FAIL
+Details: duplicate counts for columns are {'customer_id': 0, 'first_name': 2, 'last_name': 1}
+

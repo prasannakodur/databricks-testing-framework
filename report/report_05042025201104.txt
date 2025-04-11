@@ -1,0 +1,3 @@
+uniqueness_check:: has been FAIL
+Details: for column: customer_id and the count is 0; for column: first_name and the count is 2
+

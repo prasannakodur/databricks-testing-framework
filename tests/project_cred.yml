@@ -1,0 +1,65 @@
+qa:
+  postgres:
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    user: "postgres"
+    password: "Dharmavaram1@"
+    driver: "org.postgresql.Driver"
+    port: 5432
+
+  snowflake:
+    url: "jdbc:snowflake://tqtrcxi-cw03901.snowflakecomputing.com"
+    user: "KSREENIVASULU"
+    password: "Dharmavaram@2024"
+    database: "TEST_DB"
+    schema: "TEST_SCHEMA"
+    driver: "net.snowflake.client.jdbc.SnowflakeDriver"
+
+  mysql:
+    url: "jdbc:mysql://localhost:3306/parks_and_recreation?useSSL=false&serverTimezone=UTC"
+    user: "root"
+    password: "Roshni@2022"
+    driver: "com.mysql.cj.jdbc.Driver"
+
+#dev:
+#  postgres:
+#    url: "jdbc:postgresql://localhost:5432/postgres"
+#    user: "postgres"
+#    password: "Dharmavaram1@"
+#    driver: "org.postgresql.Driver"
+#    port: 5432
+#
+#  oracle:
+#    username: "test123"
+#    password: "oracle_password"
+#    connection_string: "jdbc:oracle:thin:@//dev-db-host:1521/ORCL"
+#
+#  adls:
+#    account_name: "myadlsdevaccount"
+#    account_key: "myadlsdevkey"
+
+
+
+
+prod:
+  postgres:
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    user: "postgres"
+    password: "Dharmavaram1@"
+    driver: "org.postgresql.Driver"
+    port: 5432
+  oracle:
+    username: "oracle_user"
+    password: "oracle_password"
+    connection_string: "jdbc:oracle:thin:@//dev-db-host:1521/ORCL"
+
+preprod:
+  postgres:
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    user: "postgres"
+    password: "Dharmavaram1@"
+    driver: "org.postgresql.Driver"
+    port: 5432
+  oracle:
+    username: "oracle_user"
+    password: "oracle_password"
+    connection_string: "jdbc:oracle:thin:@//dev-db-host:1521/ORCL"

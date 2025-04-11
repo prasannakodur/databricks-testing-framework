@@ -1,0 +1,27 @@
+source:
+  type: "database"
+  transformation : ["n","sql"]
+  table: "customer"
+  cred_lookup: "mysql"
+  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
+
+
+target:
+  type: "database"
+  transformation : ["n","sql"]
+  table: "customer_one"
+  cred_lookup: "mysql"
+  exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
+
+validations:
+  count_check:
+    key_columns: ["customer_id"]
+  duplicate_check:
+    key_columns: ["first_name"]
+  null_check:
+    null_columns: ["customer_id","first_name","email"]
+  uniqueness_check:
+    unique_columns: ["customer_id","first_name","last_name"]
+  data_compare_check:
+    key_column: ["customer_id"]
+    num_records: 100
