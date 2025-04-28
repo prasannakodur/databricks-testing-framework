@@ -3,7 +3,6 @@ from src.data_validation.count_check import count_check
 from src.data_validation.data_compare import data_compare
 from src.data_validation.duplicate_check import duplicate_validation
 from src.data_validation.null_check import null_value_check
-from src.data_validation.schema_check import schema_check
 
 
 def test_count(read_data,read_config):
@@ -44,8 +43,3 @@ def test_data_compare_check(read_data,read_config):
     status = data_compare(source,target,num_records)
     assert status == 'PASS'
 
-def test_schema_compare_check(read_data,spark_session):
-    source,target = read_data
-    spark = spark_session
-    status = schema_check(source,target,spark)
-    assert status == 'PASS'

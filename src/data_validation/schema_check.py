@@ -14,7 +14,37 @@ def schema_check(source,target,spark):
                                              [(field.name.lower(),field.dataType.simpleString()) for field in target_schema])
 
 
-    print("source_schema_df is :", source_schema_df.show())
-    print("target_schema_df is :",target_schema_df.show())
-    status = 'PASS'
-    return status
+    # Perform a full join on column names and compare data types
+    schema_comparison = (
+        source_schema_df.alias("src")
+        .join(target_schema_df.alias("tgt"), col("src.col_name") == col("tgt.col_name"), "full_outer")
+        .select(
+            col("src.col_name").alias("source_col_name"),
+            col("tgt.col_name").alias("target_col_name"),
+            col("src.source_data_type"),
+            col("tgt.target_data_type"),
+            when(col("src.source_data_type") == col("tgt.target_data_type"), "pass")
+            .otherwise("fail")
+            .alias("status")
+        )
+    )
+
+    # Filter only rows where the status is 'fail'
+    failed = schema_comparison.filter(col("status") == "fail")
+    failed.show()
+    failed_count = failed.count()
+
+    if failed_count > 0:
+        failed_records = failed.collect()
+        failed_preview = [row.asDict() for row in failed_records]  # Convert rows to a dictionary for display
+        status = "FAIL"
+        write_output(
+            "Schema Check",
+            status,
+            f"schema failed columns Count: {failed_count}, Sample Failed Records: {failed_preview}"
+        )
+        return status
+    else:
+        status = "PASS"
+        write_output("scheck Check", status, "Schema is correct!")
+        return status
