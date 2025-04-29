@@ -7,11 +7,13 @@ def schema_check(source,target,spark):
     target_schema = target.schema
     print("target_schema is :", target_schema)
 
-    source_schema_df = spark.createDataFrame(["col_name","source_data_type"],
-                                             [(field.name.lower(),field.dataType.simpleString()) for field in source_schema])
+    source_schema_df = spark.createDataFrame(
+        [(field.name.lower(),field.dataType.simpleString()) for field in source_schema],
+        ["col_name","source_data_type"])
 
-    target_schema_df = spark.createDataFrame(["col_name","target_data_type"],
-                                             [(field.name.lower(),field.dataType.simpleString()) for field in target_schema])
+    target_schema_df = spark.createDataFrame(
+        [(field.name.lower(),field.dataType.simpleString()) for field in target_schema],
+        ["col_name","target_data_type"])
 
 
     # Perform a full join on column names and compare data types
