@@ -15,7 +15,8 @@ qa:
     driver: "net.snowflake.client.jdbc.SnowflakeDriver"
 
   mysql:
-    url: "jdbc:mysql://localhost:3306/parks_and_recreation?useSSL=false&serverTimezone=UTC"
+    url: "jdbc:mysql://localhost:3306/parks_and_recreation?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+
     user: "root"
     password: "Roshni@2022"
     driver: "com.mysql.cj.jdbc.Driver"

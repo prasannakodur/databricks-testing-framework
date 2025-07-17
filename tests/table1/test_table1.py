@@ -50,3 +50,9 @@ def test_schema_check(read_data,spark_session):
     status = schema_check(source,target,spark)
     assert status == 'PASS'
 
+def test_scd_type_1_check(read_data,read_config):
+    source,target = read_data
+    read_config = read_config
+    num_records = read_config["validations"]["data_compare_check"]
+    status = data_compare(source,target,num_records)
+    assert status == 'PASS'

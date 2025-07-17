@@ -39,6 +39,7 @@ def spark_session(request):
 #     return creds
 
 def read_query(dir_path):
+    print(dir_path)
     sql_query_path = dir_path+'/transformation.sql'
     with open(sql_query_path,'r') as file:
         sql_query = file.read()
@@ -50,7 +51,7 @@ def read_db(spark, config_data, dir_path):
     cred_lookup = config_data['cred_lookup']
     cred = cred[cred_lookup]
     print('cred',cred)
-    if config_data['transformation'][0].lower() == 'Y' and config_data['transformation'][1].lower() == 'sql':
+    if config_data['transformation'][0].lower() == 'y' and config_data['transformation'][1].lower() == 'sql':
         sql_query = read_query(dir_path)
         print("sql_query",sql_query)
         df = spark.read.format("jdbc").\
@@ -112,7 +113,9 @@ def read_data(spark_session,read_config,request):
     dir_path = request.node.fspath.dirname
     print(dir_path)
     source_config = config_data['source']
+    print("source_config is : ",source_config)
     target_config = config_data['target']
+    print("target_config is : ", target_config)
     # validation_config = config_data['validations']
     if source_config['type'] == 'database':
         source = read_db(spark,source_config,dir_path)

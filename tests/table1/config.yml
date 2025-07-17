@@ -1,6 +1,6 @@
 source:
   type: "database"
-  transformation : ["n","sql"]
+  transformation : ["y","sql"]
   table: "customer"
   cred_lookup: "mysql"
   exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
@@ -25,3 +25,5 @@ validations:
   data_compare_check:
     key_column: ["customer_id"]
     num_records: 100
+  scd_data_check:
+    key_column: [ "customer_id" ]
