@@ -1,16 +1,16 @@
 source:
-  type: "database"
-  transformation : ["y","sql"]
-  table: "customer"
-  cred_lookup: "mysql"
+  type: "databricks"
+  transformation : ["n","sql"] # Transformation logic might not apply
+  table: "your_catalog.your_schema.source_table"
+  cred_lookup: "databricks"
   exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
 
 
 target:
-  type: "database"
+  type: "databricks"
   transformation : ["n","sql"]
-  table: "customer_one"
-  cred_lookup: "mysql"
+  table: "your_catalog.your_schema.target_table"
+  cred_lookup: "databricks"
   exclude_cols: ["created_date","updated_date","hash_key","batch_id"]
 
 validations:

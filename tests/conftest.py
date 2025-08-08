@@ -1,35 +1,44 @@
 import pytest
 import yaml
+import sys
+import os
+
+# Add the project root to Python path - this is the key fix
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
 
 from pyspark.sql import SparkSession
-import os
 # from src.utility.general_utility import flatten
-
-
-#
-# dir_path = os.path.dirname(os.path.abspath(__file__))
-# print(dir_path)
-# azure_jar_path = dir_path+'azure-storage-8.6.6.jar'
-# print(azure_jar_path)
+from databricks.connect import DatabricksSession
 
 @pytest.fixture(scope='session')
 def spark_session(request):
-    dir_path = os.path.dirname(os.path.abspath(__file__))
-    azure_jar_path = dir_path + 'azure-storage-8.6.6.jar'
-    # snow_jar = '/jar/snowflake-jdbc-3.14.3.jar'
-    # postgres_jar = '/Users/admin/PycharmProjects/test_automation_project/jar/postgresql-42.2.5.jar'
-    # azure_storage = '/Users/admin/PycharmProjects/test_automation_project/jar/azure-storage-8.6.6.jar'
-    # hadoop_azure = '/Users/admin/PycharmProjects/test_automation_project/jar/hadoop-azure-3.3.1.jar'
-    sql_server = r'C:\Users\PRASANNA\PycharmProjects\taf_automation\jars\mysql-connector-j-9.1.0.jar'
-    # jar_path = snow_jar + ',' + postgres_jar + ',' + azure_storage + ',' + hadoop_azure + ',' + sql_server
-    jar_path = sql_server
-    spark = SparkSession.builder.master("local[2]") \
-        .appName("pytest_framework") \
-        .config("spark.jars", jar_path) \
-        .config("spark.driver.extraClassPath", jar_path) \
-        .config("spark.executor.extraClassPath", jar_path) \
-        .getOrCreate()
-    print("Jars inside Spark:", spark.sparkContext.getConf().get("spark.jars"))
+    # Check if any test requests a databricks connection
+    # This is a simple way to decide which spark session to create
+    # A more robust solution might use command-line arguments
+    use_databricks = False
+    config_path = request.node.fspath.dirname+'/config.yml'
+    if os.path.exists(config_path):
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+            if config.get('source', {}).get('type') == 'databricks' or config.get('target', {}).get('type') == 'databricks':
+                use_databricks = True
+
+    if use_databricks:
+        # Creates a session using the Databricks Connect configuration
+        spark = DatabricksSession.builder.getOrCreate()
+    else:
+        # Your existing local Spark Session logic
+        dir_path = os.path.dirname(os.path.abspath(__file__))
+        sql_server = r'C:\Users\PRASANNA\PycharmProjects\taf_automation\jars\mysql-connector-j-9.1.0.jar'
+        jar_path = sql_server
+        spark = SparkSession.builder.master("local[2]") \
+            .appName("pytest_framework") \
+            .config("spark.jars", jar_path) \
+            .config("spark.driver.extraClassPath", jar_path) \
+            .config("spark.executor.extraClassPath", jar_path) \
+            .getOrCreate()
+    
     return spark
 
 # def read_cred(dir_path):
@@ -51,6 +60,12 @@ def read_db(spark, config_data, dir_path):
     cred_lookup = config_data['cred_lookup']
     cred = cred[cred_lookup]
     print('cred',cred)
+
+    # Handle Databricks table reads
+    if cred_lookup == 'databricks':
+        print(f"Reading Databricks table: {config_data['table']}")
+        return spark.read.table(config_data['table'])
+
     if config_data['transformation'][0].lower() == 'y' and config_data['transformation'][1].lower() == 'sql':
         sql_query = read_query(dir_path)
         print("sql_query",sql_query)

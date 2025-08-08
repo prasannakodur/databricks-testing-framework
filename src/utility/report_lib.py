@@ -1,7 +1,10 @@
 import datetime
 import os
 
-dir_path = r'C:\Users\PRASANNA\PycharmProjects\taf_automation\report'
+# Get the project root directory dynamically
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+dir_path = os.path.join(project_root, 'report')
+
 print(dir_path)
 print('hi')
 os.makedirs(dir_path,exist_ok=True)
